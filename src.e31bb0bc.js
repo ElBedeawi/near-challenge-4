@@ -32366,8 +32366,7 @@ function Form({
     min: "0",
     step: "0.01",
     type: "number",
-    className: "form-control",
-    style: "display:inline-block;"
+    className: "form-control form-inline"
   }), /*#__PURE__*/_react.default.createElement("span", {
     title: "NEAR Tokens"
   }, "\u24C3")), /*#__PURE__*/_react.default.createElement("button", {
@@ -58127,7 +58126,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37369" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37053" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
