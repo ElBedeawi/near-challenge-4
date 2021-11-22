@@ -32364,11 +32364,14 @@ function Form({
     id: "donation",
     max: (0, _big.default)(currentUser.balance).div(10 ** 24),
     min: "0",
-    step: "0.00001",
-    type: "number"
+    step: "0.01",
+    type: "number",
+    className: "form-control",
+    style: "display:inline-block;"
   }), /*#__PURE__*/_react.default.createElement("span", {
     title: "NEAR Tokens"
   }, "\u24C3")), /*#__PURE__*/_react.default.createElement("button", {
+    className: "btn btn-primary",
     type: "submit"
   }, "Sign")));
 }
@@ -38164,21 +38167,30 @@ const App = ({
       message,
       donation
     } = e.target.elements;
-    fieldset.disabled = true; // TODO: optimistically update page with new message,
-    // update blockchain data in background
-    // add uuid to each message, so we know which one is already known
+    fieldset.disabled = true;
+    contract.getMessages().then(function (messages) {
+      var found = messages.some(m => m.sender === currentUser.accountId);
 
-    contract.addMessage({
-      text: message.value
-    }, BOATLOAD_OF_GAS, (0, _big.default)(donation.value || '0').times(10 ** 24).toFixed()).then(() => {
-      contract.getMessages().then(messages => {
-        messages.sort((a, b) => a.timestamp < b.timestamp);
-        setMessages(messages);
-        message.value = '';
-        donation.value = SUGGESTED_DONATION;
-        fieldset.disabled = false;
-        message.focus();
-      });
+      if (found) {
+        window.alert('Signed Before!!');
+        return;
+      } else {
+        // TODO: optimistically update page with new message,
+        // update blockchain data in background
+        // add uuid to each message, so we know which one is already known
+        contract.addMessage({
+          text: message.value
+        }, BOATLOAD_OF_GAS, (0, _big.default)(donation.value || '0').times(10 ** 24).toFixed()).then(() => {
+          contract.getMessages().then(messages => {
+            messages.sort((a, b) => a.timestamp < b.timestamp);
+            setMessages(messages);
+            message.value = '';
+            donation.value = SUGGESTED_DONATION;
+            fieldset.disabled = false;
+            message.focus();
+          });
+        });
+      }
     });
   };
 
@@ -38192,8 +38204,10 @@ const App = ({
   };
 
   return /*#__PURE__*/_react.default.createElement("main", null, /*#__PURE__*/_react.default.createElement("header", null, /*#__PURE__*/_react.default.createElement("h1", null, "NEAR Guest Book"), currentUser ? /*#__PURE__*/_react.default.createElement("button", {
+    className: "btn btn-primary",
     onClick: signOut
   }, "Log out") : /*#__PURE__*/_react.default.createElement("button", {
+    className: "btn btn-primary",
     onClick: signIn
   }, "Log in")), currentUser ? /*#__PURE__*/_react.default.createElement(_Form.default, {
     onSubmit: onSubmit,
@@ -58113,7 +58127,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34005" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37369" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
